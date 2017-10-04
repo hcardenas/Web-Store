@@ -1,4 +1,46 @@
+0. before anything 
+  0.1 make all the files 
+    server.js
+    sequilize init
+    handlebars files 
+    html stuff i.e public with css img
+    
+  0.2 make the database schema 
+    0.2.1 check for validation
+  0.3 make tge heroku app soon as possible
+  0.4 some initial producs in database 
+  
+  
+
 1. show producsts with full CRUD (create rempve update delete)
-2. categories for products (sort)
-3. users/admin - basic cart 
-4. emails/msg
+  1.1 make home page (will be login ) 
+    1.1.1 carusel of something 
+    1.1.2 log in that takes to store website 
+      1.1.2.1 at firt takes to store without doing anything  
+  1.2 make html store
+    1.2.1 on the top make navbar with categories of fictional characters (drop down) 
+    also log in here
+      harry potter - rick and morty - star wars, etc
+    1.2.2 on the right side make the empty cart section
+    1.2.3 the rest is for images of products 
+  1.3 inmplement showing producs 
+  1.4 implement crud (make our own api)
+  
+3. emails/msg - twilio   
+
+4. categories for products (sort)
+  2.1 users/admin - basic cart (maybe firebase)
+  2.2 someone check how to add images 
+
+
+
+
+Nice to Have 
+facebook share 
+check amazon stuff 
+some apis 
+
+
+
+products to sell 
+  fantasy products (go from there) money ruppies 
