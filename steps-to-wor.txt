@@ -1,0 +1,4 @@
+1. show producsts with full CRUD (create rempve update delete)
+2. categories for products (sort)
+3. users/admin - basic cart 
+4. emails/msg
