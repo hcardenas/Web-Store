@@ -14,11 +14,11 @@ $(document).ready(function () {
 		// add validation here !!!!!!!
 
 
-		console.log(`here comes the post request ${data}`);
+		
 		$.post("/login", data).then(function () {
 			$("#logInForm")[0].reset();
 		});
-		console.log("after the request");
+		
 	});
 
 }); // end of document.ready

@@ -50,4 +50,4 @@ products to sell
 Presentation Stuff 
 
 -- user log in
-  
+  talk about express-validator
