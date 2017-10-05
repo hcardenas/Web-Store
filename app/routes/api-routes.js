@@ -36,4 +36,14 @@ module.exports = function(app) {
   app.put("/api/posts", function(req, res) {
     
   });
+
+  // POST to log in users
+  app.post("/login", function(req, res) {
+
+    console.log(req.body);
+
+    res.render("login");
+  });
+
+
 };
