@@ -55,14 +55,15 @@ module.exports = function(app) {
 
     if (errors) {
       console.log(`errors ${JSON.stringify(errors)}`);
+      res.render("login", {
+        title : "Log in Error"
+      });
     } else {
       db.Users.create(req.body).then(function(dbAuthor) {
-      res.render("index");
-    });
+        res.render("store");
+      });
     }
-
-    
-    
+       
   });
 
 

@@ -4,8 +4,19 @@
 <div class="row">
 	<div class=" col-md-5 offset-md-3">
 		{{!-- <form method="POST" action="/login"> --}}
+
+
 		<form id="logInForm">
-	        <h2 class="form-signin-heading">Please log in</h2>
+	        <h2 class="form-signin-heading">{{title}}</h2>
+			
+			{{#if errors}}
+				{{#each errors}}
+					<div class="alert alert-danger" role="alert">
+						 something
+					</div>
+				{{/each}}
+			{{/if}}
+
 
 	        <div class="form-group">
 		        <label for="username" >Username</label>

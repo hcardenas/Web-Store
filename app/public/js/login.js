@@ -10,7 +10,7 @@ $(document).ready(function () {
 		data.username = $("#username").val().trim();
 		data.email = $("#email").val().trim();
 		data.password = $("#password").val().trim();
-
+		data.matchPassword = $("#matchPassword").val().trim();
 		// add validation here !!!!!!!
 
 
