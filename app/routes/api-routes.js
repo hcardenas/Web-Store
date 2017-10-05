@@ -56,6 +56,7 @@ module.exports = function(app) {
     if (errors) {
       console.log(`errors ${JSON.stringify(errors)}`);
       res.render("login", {
+        errors : errors,
         title : "Log in Error"
       });
     } else {
