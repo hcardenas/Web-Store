@@ -3,7 +3,11 @@
 		<div class=" col-md-6">
 			<form method="POST" action="/login">
 				<br>
-		        <h2 class="form-signin-heading">{{title}}</h2>
+		        <h2 class="form-signin-heading">
+					{{#if title}}
+		        		{{title}}
+		        	{{/if}}
+		        </h2>
 				
 				{{#if errors}}
 					{{#each errors}}

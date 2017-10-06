@@ -14,6 +14,8 @@ module.exports = function(app) {
 
   // index route loads view.html
   app.get("/", function(req, res) {
+  	console.log("\n*******"+ req.user +"\n ");
+  	console.log(req.isAuthenticated());
     res.render("login", {title : "Please Log in"});
   });
   

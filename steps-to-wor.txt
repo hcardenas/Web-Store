@@ -52,3 +52,5 @@ Presentation Stuff
 -- user log in
   talk about express-validator
   wer saving paswords as a hash
+  bcrypt module and saltrounds (time it takes to hash in order to protect from multiple attemtpts)
+  passport module 

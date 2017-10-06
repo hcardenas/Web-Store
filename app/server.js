@@ -9,6 +9,12 @@ var bodyParser = require("body-parser");
 var exphbs = require("express-handlebars");
 var expressValidator = require('express-validator');
 var cookieParser = require('cookie-parser');
+var randomstring = require("randomstring"); 
+var path = require('path');
+
+// Authentication Packages 
+var session = require("express-session");
+var passport = require("passport");
 
 // Sets up the Express App
 // =============================================================
@@ -28,8 +34,18 @@ app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 app.use(expressValidator());
 
 // Static directory
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname,"public")));
 
+
+// Authentication has to be used after cookieParse 
+app.use( session({
+  secret: randomstring.generate(),
+  resave: false,
+  saveUninitialized: false,
+  //cookie: { secure: true }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Set Handlebars.
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
@@ -67,4 +83,5 @@ db.sequelize.sync({ force: true }).then(function() {
   app.listen(PORT, function() {
     console.log("App listening on PORT " + PORT);
   });
+
 });
