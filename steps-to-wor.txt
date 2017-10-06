@@ -44,3 +44,11 @@ some apis
 
 products to sell 
   fantasy products (go from there) money ruppies 
+
+
+
+Presentation Stuff 
+
+-- user log in
+  talk about express-validator
+  wer saving paswords as a hash

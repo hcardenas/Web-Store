@@ -7,6 +7,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var exphbs = require("express-handlebars");
+var expressValidator = require('express-validator');
 // Sets up the Express App
 // =============================================================
 var app = express();
@@ -21,6 +22,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 
+app.use(expressValidator());
+
 // Static directory
 app.use(express.static("public"));
 
@@ -28,7 +31,7 @@ app.use(express.static("public"));
 // Set Handlebars.
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
-
+//exphbs.registerPartials(__dirname + '/views/partials');
 // Routes
 // =============================================================
 require("./routes/api-routes.js")(app);

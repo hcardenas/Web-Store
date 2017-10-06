@@ -14,12 +14,12 @@ module.exports = function(app) {
 
   // index route loads view.html
   app.get("/", function(req, res) {
-    res.render("login");
+    res.render("login", {title : "Please Log in"});
   });
-
-  app.post("/login", function(req, res) {
-    res.render("login");
+  app.get("/store", function(req, res) {
+    res.render("store");
   });
+  
 
 
 };
