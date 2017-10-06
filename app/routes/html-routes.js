@@ -16,6 +16,7 @@ module.exports = function(app) {
   app.get("/", function(req, res) {
     res.render("login", {title : "Please Log in"});
   });
+  
   app.get("/store", function(req, res) {
     res.render("store");
   });
