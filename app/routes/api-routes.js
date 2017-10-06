@@ -8,6 +8,9 @@
 // Requiring our Todo model
 var db = require("../models");
 var expressValidator = require('express-validator');
+var bcrypt = require("bcrypt");
+var saltRounds = 10;
+
 // Routes
 // =============================================================
 module.exports = function(app) {
@@ -60,8 +63,18 @@ module.exports = function(app) {
         title : "Log in Error"
       });
     } else {
-      db.Users.create(req.body).then(function(dbAuthor) {
-        res.render("store");
+
+      
+      const reqPassword = req.body.password;
+
+      bcrypt.hash(reqPassword, saltRounds, function(err, hash) {
+        db.Users.create({
+          username : req.body.username,
+          email : req.body.email,
+          password : hash
+        }).then(function(dbAuthor) {
+          res.render("store");
+        });
       });
     }
        
