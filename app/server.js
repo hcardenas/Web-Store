@@ -31,7 +31,7 @@ app.use(express.static("public"));
 // Set Handlebars.
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
-
+//exphbs.registerPartials(__dirname + '/views/partials');
 // Routes
 // =============================================================
 require("./routes/api-routes.js")(app);

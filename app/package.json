@@ -26,5 +26,8 @@
     "mysql": "^2.14.1",
     "mysql2": "^1.4.2",
     "sequelize": "^4.13.3"
+  },
+  "devDependencies": {
+    "nightmare": "^2.10.0"
   }
 }
