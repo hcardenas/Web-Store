@@ -21,11 +21,15 @@ module.exports = function(app) {
     db.Categories.findAll({}).then(function (dbResults) {
       console.log("********\n" + dbResults + "~~~~~~~")
       res.render("store", {cat : dbResults});
-    })
+    });
     
   });
   
-
+  app.get("/store/:categoryName", authenticationMiddleware() , function(req, res) {
+    db.Categories.findAll({}).then(function (dbResults) {
+      res.render("store", {cat : dbResults, title : req.param.categoryName});
+    });
+  });
 
   function authenticationMiddleware () {  
     return (req, res, next) => {
