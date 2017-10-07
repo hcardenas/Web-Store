@@ -5,7 +5,7 @@
 // Dependencies
 // =============================================================
 var path = require("path");
-
+var db = require("../models");
 // Routes
 // =============================================================
 module.exports = function(app) {
@@ -18,7 +18,11 @@ module.exports = function(app) {
   });
   
   app.get("/store", authenticationMiddleware(), function(req, res) {
-    res.render("store");
+    db.Categories.findAll({}).then(function (dbResults) {
+      console.log("********\n" + dbResults + "~~~~~~~")
+      res.render("store", {cat : dbResults});
+    })
+    
   });
   
 
