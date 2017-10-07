@@ -43,7 +43,7 @@ module.exports = function(app) {
   });
 
   // POST to log in users
-  app.post("/login", function(req, res) {
+  app.post("/sign-up", function(req, res) {
 
     // uses validator in toder to check for good data
     req.checkBody('username', 'Username field cannot be empty.').notEmpty();
@@ -62,7 +62,7 @@ module.exports = function(app) {
       console.log(`errors ${JSON.stringify(errors)}`);
       res.render("login", {
         errors: errors,
-        title: "Log in Error"
+        title: "Errors!"
       });
     } else {
 

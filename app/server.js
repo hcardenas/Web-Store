@@ -16,6 +16,9 @@ var path = require('path');
 var session = require("express-session");
 var passport = require("passport");
 
+var SequelizeStore = require('connect-session-sequelize')(session.Store);
+
+
 // Sets up the Express App
 // =============================================================
 var app = express();
@@ -42,6 +45,9 @@ app.use( session({
   secret: randomstring.generate(),
   resave: false,
   saveUninitialized: false,
+  store : new SequelizeStore({
+    db: db.sequelize
+  })
   //cookie: { secure: true }
 }));
 app.use(passport.initialize());
@@ -78,7 +84,7 @@ app.use(function(err, req, res, next) {
 
 // Syncing our sequelize models and then starting our Express app
 // =============================================================
-db.sequelize.sync({ force: true }).then(function() {
+db.sequelize.sync().then(function() {
 
   app.listen(PORT, function() {
     console.log("App listening on PORT " + PORT);

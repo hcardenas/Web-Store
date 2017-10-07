@@ -14,15 +14,23 @@ module.exports = function(app) {
 
   // index route loads view.html
   app.get("/", function(req, res) {
-  	console.log("\n*******"+ req.user +"\n ");
-  	console.log(req.isAuthenticated());
-    res.render("login", {title : "Please Log in"});
+    res.render("login", {title : "Please Log in or Sign Up"});
   });
   
-  app.get("/store", function(req, res) {
+  app.get("/store", authenticationMiddleware(), function(req, res) {
     res.render("store");
   });
   
+
+
+  function authenticationMiddleware () {  
+    return (req, res, next) => {
+      console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
+
+      if (req.isAuthenticated()) return next();
+      res.redirect('/')
+    }
+  }
 
 
 };
