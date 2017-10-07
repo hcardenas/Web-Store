@@ -15,7 +15,8 @@ var path = require('path');
 // Authentication Packages 
 var session = require("express-session");
 var passport = require("passport");
-
+var LocalStrategy = require('passport-local').Strategy;
+var bcrypt = require("bcrypt");
 var SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 
@@ -62,6 +63,32 @@ app.set("view engine", "handlebars");
 // =============================================================
 require("./routes/api-routes.js")(app);
 require("./routes/html-routes.js")(app);
+
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+
+    db.Users.findOne( {where : { username: username }}).then(function (user) {
+
+      console.log("\n" + user.username + "\n" + password + "\n");
+      if (!user.username) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+
+
+      bcrypt.compare(password, user.password, function(err, response) {
+        if (response) return done(null, {user_id : user.id});
+        else return done(null, false);
+
+        console.log(response);
+
+        
+      });
+
+      
+    });
+  }
+));
 
 
 // catch 404 and forward to error handler
