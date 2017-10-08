@@ -5,7 +5,7 @@
 // Dependencies
 // =============================================================
 var path = require("path");
-
+var db = require("../models");
 // Routes
 // =============================================================
 module.exports = function(app) {
@@ -18,17 +18,25 @@ module.exports = function(app) {
   });
   
   app.get("/store", authenticationMiddleware(), function(req, res) {
-    res.render("store");
+    db.Categories.findAll({}).then(function (dbResults) {
+      console.log("********\n" + dbResults + "~~~~~~~")
+      res.render("store", {cat : dbResults});
+    });
+    
   });
   
-
+  app.get("/store/:categoryName", authenticationMiddleware() , function(req, res) {
+    db.Categories.findAll({}).then(function (dbResults) {
+      res.render("store", {cat : dbResults, title : req.param.categoryName});
+    });
+  });
 
   function authenticationMiddleware () {  
     return (req, res, next) => {
       console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
 
       if (req.isAuthenticated()) return next();
-      res.redirect('/')
+      res.render('login', {title : "Error Loging"})
     }
   }
 

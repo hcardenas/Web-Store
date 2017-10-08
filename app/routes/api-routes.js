@@ -90,7 +90,11 @@ module.exports = function(app) {
           const user_id = dbResponse.id;
           console.log(user_id);
           req.login(user_id, err => {
-            res.render("store");
+            db.Categories.findAll({}).then(function (dbResults) {
+              res.render("store", {cat : dbResults});
+            });
+
+            //res.render("store");
           });
           // res.render("store");
 
