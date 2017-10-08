@@ -42,7 +42,13 @@ module.exports = function(app) {
 
   });
 
-app.post("/log-in", passport.authenticate('local', {successRedirect : '/store', failureRedirect : '/' } ));
+  app.post("/log-in", passport.authenticate('local', {successRedirect : '/store', failureRedirect : '/' } ));
+
+  app.get("/log-out", function(req, res) {
+    req.logout();
+    req.session.destroy();
+    res.redirect("/");
+  });
 
 
   // POST to log in users
