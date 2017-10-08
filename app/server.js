@@ -80,7 +80,6 @@ passport.use(new LocalStrategy(
       }
     }).then(function(user) {
 
-      console.log("\n" + user.username + "\n" + password + "\n");
       if (!user.username) {
         return done(null, false, {
           message: 'Incorrect username.'
@@ -92,11 +91,8 @@ passport.use(new LocalStrategy(
         if (response) return done(null, {
           user_id: user.id
         });
-        else return done(null, false);
-
-        console.log(response);
-
-
+        else 
+          return done(null, false);
       })
 
 

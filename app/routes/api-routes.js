@@ -96,7 +96,10 @@ module.exports = function(app) {
 
 
         }).catch(err => {
-
+          res.render("login", {
+            errors: err,
+            title: "Errors!"
+          });
         });
       });
     }
