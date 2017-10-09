@@ -13,12 +13,7 @@
         <li class="list-group-item"><p class="card-text">{{this.categories}}</p></li>
         {{/each}}
       </ul>
-      <br> 
-        
-
-      
-      <br>
-      <br>
+      <br><br><br>
     </div>
   </div>
   <div class="row justify-content-center">
@@ -30,13 +25,20 @@
           <br>
         {{/if}}
       </p>
-      <form method="POST" action="/admin/add-category">
+      <form id="deleteFormId">
         <div class="form-group">
-          <label for="categories">New Category:</label>
-          <input type="text" class="form-control" id="categories" name="categories">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+    <label for="dropDownSelect">Remove Category</label>
+    <select class="form-control" id="dropDownSelect">
+      {{#each categories}}
+        <option>
+          {{this.categories}}
+        </option>
+      {{/each}}
+    </select>
+  </div>
+        <button type="submit" class="btn btn-default" id="submitbtnId">Submit</button>
       </form>
     </div>
   </div>
 </div>
+<script src="../../js/admin-delete.js"></script>

@@ -33,7 +33,7 @@ module.exports = function(app) {
   });
 
   app.get("/admin", function(req, res) {
-    console.log(`*********** ${req.user.user} ~~~~~~~~~~`);
+    
     if (req.user.user === "admin") {
       db.Categories.findAll({}).then(function (dbResults) {
         res.render("adminCreateCategory", {categories : dbResults});
@@ -44,12 +44,34 @@ module.exports = function(app) {
     }
   });
 
+
+  app.get("/admin/remove-category", function(req, res) {
+    if (req.user.user === "admin") {
+      db.Categories.findAll({}).then(function (dbResults) {
+        res.render("adminDeleteCategory", {categories : dbResults});
+      });
+    }
+    else {
+      res.redirect("/")
+    }
+  });
+
   app.delete("/admin/remove-category/:category", function(req, res) {
     
     if (req.user.user === "admin") {
-      db.Categories.destroy({}).then(function (dbResults) {
-        res.render("adminCreateCategory", {categories : dbResults});
-      });
+      db.Categories.destroy({
+        where : {
+          categories : req.params.category
+        }
+      })
+      .then(function(rowDeleted) {
+          db.Categories.findAll({}).then(function(dbResults) {
+            res.render("adminDeleteCategory", {
+              categories: dbResults,
+              success : ` ${rowDeleted.categories} removed from database`
+            });
+          })
+        });
     }
     else {
       res.redirect("/")
@@ -60,10 +82,11 @@ module.exports = function(app) {
 
     if (req.user.user === "admin") {
       db.Categories.create(req.body)
-        .then(function(dbResults) {
+        .then(function(newCat) {
           db.Categories.findAll({}).then(function(dbResults) {
             res.render("adminCreateCategory", {
-              categories: dbResults
+              categories: dbResults,
+              success : ` ${newCat.categories} added to database`
             });
           }).catch(function (err) {
             res.redirect("/");
