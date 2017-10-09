@@ -14,32 +14,40 @@ module.exports = function(app) {
 
   // index route loads view.html
   app.get("/", function(req, res) {
-    res.render("login", {title : "Please Log in or Sign Up"});
-  });
-  
-  app.get("/store", authenticationMiddleware(), function(req, res) {
-    db.Categories.findAll({}).then(function (dbResults) {
-      console.log("********\n" + dbResults + "~~~~~~~")
-      res.render("store", {cat : dbResults});
+    res.render("login", {
+      title: "Please Log in or Sign Up"
     });
-    
   });
-  
-  app.get("/store/:categoryName", authenticationMiddleware() , function(req, res) {
-  
-    db.Categories.findAll({}).then(function (dbResults) {
-      res.render("store", {cat : dbResults, title : req.param.categoryName});
+
+  app.get("/store", authenticationMiddleware(), function(req, res) {
+    db.Categories.findAll({}).then(function(dbResults) {
+      console.log("********\n" + dbResults + "~~~~~~~")
+      res.render("store", {
+        cat: dbResults
+      });
+    });
+
+  });
+
+  app.get("/store/:categoryName", authenticationMiddleware(), function(req, res) {
+
+    db.Categories.findAll({}).then(function(dbResults) {
+      res.render("store", {
+        cat: dbResults,
+        title: req.param.categoryName
+      });
     });
   });
 
   app.get("/admin", function(req, res) {
-    
+
     if (req.user.user === "admin") {
-      db.Categories.findAll({}).then(function (dbResults) {
-        res.render("adminCreateCategory", {categories : dbResults});
+      db.Categories.findAll({}).then(function(dbResults) {
+        res.render("adminCreateCategory", {
+          categories: dbResults
+        });
       });
-    }
-    else {
+    } else {
       res.redirect("/")
     }
   });
@@ -47,33 +55,50 @@ module.exports = function(app) {
 
   app.get("/admin/remove-category", function(req, res) {
     if (req.user.user === "admin") {
-      db.Categories.findAll({}).then(function (dbResults) {
-        res.render("adminDeleteCategory", {categories : dbResults});
+      db.Categories.findAll({}).then(function(dbResults) {
+        res.render("adminDeleteCategory", {
+          categories: dbResults
+        });
       });
+    } else {
+      res.redirect("/")
     }
-    else {
+  });
+
+  app.get("/admin/add-product", function(req, res) {
+    if (req.user.user === "admin") {
+      db.Product.findAll({}).then(function(allProducts) {
+        db.Categories.findAll({
+          order: [['categories', 'DESC']]
+        }).then(function(allCat) {
+          res.render("adminAddProduct", {
+            products: allProducts,
+            categories: allCat
+          });
+        });
+      });
+    } else {
       res.redirect("/")
     }
   });
 
   app.delete("/admin/remove-category/:category", function(req, res) {
-    
+
     if (req.user.user === "admin") {
       db.Categories.destroy({
-        where : {
-          categories : req.params.category
-        }
-      })
-      .then(function(rowDeleted) {
+          where: {
+            categories: req.params.category
+          }
+        })
+        .then(function(rowDeleted) {
           db.Categories.findAll({}).then(function(dbResults) {
             res.render("adminDeleteCategory", {
               categories: dbResults,
-              success : ` ${rowDeleted.categories} removed from database`
+              success: ` ${rowDeleted.categories} removed from database`
             });
           })
         });
-    }
-    else {
+    } else {
       res.redirect("/")
     }
   });
@@ -86,9 +111,35 @@ module.exports = function(app) {
           db.Categories.findAll({}).then(function(dbResults) {
             res.render("adminCreateCategory", {
               categories: dbResults,
-              success : ` ${newCat.categories} added to database`
+              success: ` ${newCat.categories} added to database`
             });
-          }).catch(function (err) {
+          }).catch(function(err) {
+            res.redirect("/");
+          });
+        });
+    } else {
+      res.redirect("/")
+    }
+
+  });
+
+  app.post("/admin/add-product", function(req, res) {
+
+    if (req.user.user === "admin") {
+      db.Product.create(req.body)
+        .then(function(newProduct) {
+          db.Product.findAll({
+            order: [['categories', 'DESC']]
+          }).then(function(dbResults) {
+            db.Categories.findAll({}).then(function(allCat) {
+              res.render("adminAddProduct", {
+                products: dbResults,
+                categories : allCat,
+                success: ` ${newProduct.productName} added to database`
+              });
+            });
+
+          }).catch(function(err) {
             res.redirect("/");
           });
         });
@@ -100,16 +151,16 @@ module.exports = function(app) {
 
 
 
-  function authenticationMiddleware () {  
+  function authenticationMiddleware() {
     return (req, res, next) => {
       console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
 
       if (req.isAuthenticated()) return next();
-      res.render('login', {title : "Error Loging"})
+      res.render('login', {
+        title: "Error Loging"
+      })
     }
   }
-
-
 
 
 
