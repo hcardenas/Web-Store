@@ -8,18 +8,12 @@ module.exports = function(sequelize, DataTypes) {
 		categories: {
 			type: DataTypes.STRING,
 			allowNull: false
+		},
+	}, {
+		associate: function(models) {
+			Product.belongsTo(models.Categories , {onDelete:'CASCADE'});
 		}
-
-
 	});
 
-	Product.associate = function(models) {
-		
-		Product.belongsTo(models.Categories, {
-			foreignKey: {
-				allowNull: false
-			}
-		});
-	};
 	return Product;
 };
