@@ -26,10 +26,56 @@ module.exports = function(app) {
   });
   
   app.get("/store/:categoryName", authenticationMiddleware() , function(req, res) {
+  
     db.Categories.findAll({}).then(function (dbResults) {
       res.render("store", {cat : dbResults, title : req.param.categoryName});
     });
   });
+
+  app.get("/admin", function(req, res) {
+    console.log(`*********** ${req.user.user} ~~~~~~~~~~`);
+    if (req.user.user === "admin") {
+      db.Categories.findAll({}).then(function (dbResults) {
+        res.render("adminCreateCategory", {categories : dbResults});
+      });
+    }
+    else {
+      res.redirect("/")
+    }
+  });
+
+  app.delete("/admin/remove-category/:category", function(req, res) {
+    
+    if (req.user.user === "admin") {
+      db.Categories.destroy({}).then(function (dbResults) {
+        res.render("adminCreateCategory", {categories : dbResults});
+      });
+    }
+    else {
+      res.redirect("/")
+    }
+  });
+
+  app.post("/admin/add-category", function(req, res) {
+
+    if (req.user.user === "admin") {
+      db.Categories.create(req.body)
+        .then(function(dbResults) {
+          db.Categories.findAll({}).then(function(dbResults) {
+            res.render("adminCreateCategory", {
+              categories: dbResults
+            });
+          }).catch(function (err) {
+            res.redirect("/");
+          });
+        });
+    } else {
+      res.redirect("/")
+    }
+
+  });
+
+
 
   function authenticationMiddleware () {  
     return (req, res, next) => {
@@ -39,6 +85,9 @@ module.exports = function(app) {
       res.render('login', {title : "Error Loging"})
     }
   }
+
+
+
 
 
 };

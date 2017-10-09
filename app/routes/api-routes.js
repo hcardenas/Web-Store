@@ -42,7 +42,10 @@ module.exports = function(app) {
 
   });
 
-  app.post("/log-in", passport.authenticate('local', {successRedirect : '/store', failureRedirect : '/' } ));
+  app.post("/log-in", passport.authenticate('local', {
+    successRedirect: '/store',
+    failureRedirect: '/'
+  }));
 
   app.get("/log-out", function(req, res) {
     req.logout();
@@ -88,10 +91,13 @@ module.exports = function(app) {
           console.log("here something" + JSON.stringify(dbResponse));
 
           const user_id = dbResponse.id;
-          console.log(user_id);
-          req.login(user_id, err => {
-            db.Categories.findAll({}).then(function (dbResults) {
-              res.render("store", {cat : dbResults});
+          req.login({
+            user_id: user_id
+          }, err => {
+            db.Categories.findAll({}).then(function(dbResults) {
+              res.render("store", {
+                cat: dbResults
+              });
             });
 
             //res.render("store");
