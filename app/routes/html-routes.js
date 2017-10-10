@@ -88,10 +88,7 @@ module.exports = function(app) {
         db.Categories.findAll({
           order: [['categories', 'DESC']]
         }).then(function(allCat) {
-          res.render("adminAddProduct", {
-            products: allProducts,
-            categories: allCat
-          });
+          res.render("adminRemoveProduct");
         });
       });
     } else {
@@ -164,6 +161,22 @@ module.exports = function(app) {
       res.redirect("/")
     }
 
+  });
+
+  app.delete("/admin/remove-product/:id", function(req, res) {
+
+    if (req.user.user === "admin") {
+      db.Product.destroy({
+          where: {
+            id: req.params.id
+          }
+        })
+        .then(function(rowDeleted) { 
+            res.json(rowDeleted);         
+        });
+    } else {
+      res.redirect("/")
+    }
   });
 
 

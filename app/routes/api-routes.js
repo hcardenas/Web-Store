@@ -18,13 +18,13 @@ var saltRounds = 10;
 module.exports = function(app) {
 
   // GET route for getting all 
-  app.get("/api/get-all-products/", function(req, res) {
+  app.get("/api/get-all-products", function(req, res) {
     db.Product.findAll({}).then(function(dbResults) {
       res.json(dbResults);
     });
   });
 
-  app.get("/api/get-all-categories/", function(req, res) {
+  app.get("/api/get-all-categories", function(req, res) {
     db.Categories.findAll({}).then(function(dbResults) {
       res.json(dbResults);
     });
