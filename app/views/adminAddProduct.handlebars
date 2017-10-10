@@ -37,9 +37,9 @@
         </div>
         <div class="form-group">
           <label for="categories">Product Category</label>
-          <select class="form-control" id="categories" name="categories">
+          <select class="form-control" id="categories" name="CategoryId">
             {{#each categories}}
-            <option>
+            <option value={{this.categories.id}}>
               {{this.categories}}
             </option>
             {{/each}}

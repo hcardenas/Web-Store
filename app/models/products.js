@@ -4,16 +4,13 @@ module.exports = function(sequelize, DataTypes) {
 		productName: {
 			type: DataTypes.STRING,
 			allowNull: false
-		},
-		categories: {
-			type: DataTypes.STRING,
-			allowNull: false
-		},
-	}, {
-		associate: function(models) {
-			Product.belongsTo(models.Categories , {onDelete:'CASCADE'});
 		}
 	});
+
+
+ Product.associate = function (models) {
+	Product.belongsTo(models.Categories);
+}
 
 	return Product;
 };
