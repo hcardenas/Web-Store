@@ -18,9 +18,21 @@ var saltRounds = 10;
 module.exports = function(app) {
 
   // GET route for getting all 
-  app.get("/api/posts/", function(req, res) {
-    db.Users.create(req.body).then(function(dbAuthor) {
-      res.json(dbAuthor);
+  app.get("/api/get-all-products/", function(req, res) {
+    db.Product.findAll({}).then(function(dbResults) {
+      res.json(dbResults);
+    });
+  });
+
+  app.get("/api/get-all-categories/", function(req, res) {
+    db.Categories.findAll({}).then(function(dbResults) {
+      res.json(dbResults);
+    });
+  });
+
+  app.get("/api/get-products-by-categories/:category", function(req, res) {
+    db.Product.findAll({where : {categories : req.params.category}}).then(function(dbResults) {
+      res.json(dbResults);
     });
   });
 

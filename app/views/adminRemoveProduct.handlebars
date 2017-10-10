@@ -1,0 +1,36 @@
+{{>adminNavbar}}
+
+<br>
+<div class="container">
+
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+  
+      <br>
+      <ul class="list-group">
+        <li class="list-group-item active text-center">Existing Categories<p class="card-text"></p></li>
+        {{#each products}}
+        <li class="list-group-item"><p class="card-text">{{this.productName}} - {{this.categories}}</p></li>
+        {{/each}}
+      </ul>
+      <br> 
+        
+
+      
+      <br>
+      <br>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-6 ">
+      <p class="text-center text-primary lead"> 
+        {{#if success}}
+          <br>
+          {{this.success}}
+          <br>
+        {{/if}}
+      </p>
+      
+    </div>
+  </div>
+</div>

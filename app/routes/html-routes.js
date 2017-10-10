@@ -82,6 +82,23 @@ module.exports = function(app) {
     }
   });
 
+  app.get("/admin/remove-product", function(req, res) {
+    if (req.user.user === "admin") {
+      db.Product.findAll({}).then(function(allProducts) {
+        db.Categories.findAll({
+          order: [['categories', 'DESC']]
+        }).then(function(allCat) {
+          res.render("adminAddProduct", {
+            products: allProducts,
+            categories: allCat
+          });
+        });
+      });
+    } else {
+      res.redirect("/")
+    }
+  });
+
   app.delete("/admin/remove-category/:category", function(req, res) {
 
     if (req.user.user === "admin") {
