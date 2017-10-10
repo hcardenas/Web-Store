@@ -1,10 +1,93 @@
-<form class="form-signin" method="POST" action="/login">
-        <h2 class="form-signin-heading">Please log in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-        <label for="matchPassword" class="sr-only">Re-Enter Password</label>
-        <input type="password" id="matchPassword" class="form-control" placeholder="Password" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-</form>
+<div class="container">
+	<div class="row justify-content-center">
+		<div class=" col-md-6">
+			
+				<br>
+		        <h2 class="form-signin-heading">
+					{{#if title}}
+		        		{{title}}
+		        	{{/if}}
+		        </h2>
+				
+				{{#if errors}}
+					{{#each errors}}
+						<div class="alert alert-danger" role="alert">
+							 {{this.msg}}
+						</div>
+					{{/each}}
+				{{/if}}
+
+
+
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" data-toggle="tab" href="#signUp" role="tab">Sign Up</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#LogIn" role="tab">Log In</a>
+					</li>
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div class="tab-pane active" id="signUp" role="tabpanel">
+
+						<form method="POST" action="/sign-up">
+					        <div class="form-group">
+						        <label for="username" >Username</label>
+						        <input type="text" name="username" id="username" class="form-control" placeholder="Username" required autofocus>
+							</div>
+							<div class="form-group">
+					        	<label for="email" >Email address</label>
+					        	<input type="email" name="email" id="email" class="form-control" placeholder="Email address" required autofocus>
+					    	</div>
+					    	<div class="form-group">
+					        	<label for="password" >Password</label>        
+					        	<input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+					        	<small id="passwordHelpBlock" class="form-text text-muted">
+				  				Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+								</small>
+							</div>
+							<div class="form-group">
+					        	<label for="matchPassword" >Re-Enter Password</label>
+					        	<input type="password" name="matchPassword" id="matchPassword" class="form-control" placeholder="Password" required>
+					        	
+					        </div>
+					        <div class="form-group">
+					        	<button class="btn btn-lg btn-primary btn-block" type="submit" id="submitLogin">Sign in</button>
+					        </div>
+						</form>
+
+
+					</div>
+					<div class="tab-pane" id="LogIn" role="tabpanel">
+
+						<form method="POST" action="/log-in">
+					        <div class="form-group">
+						        <label for="username" >Username</label>
+						        <input type="text" name="username" id="username" class="form-control" placeholder="Username" required autofocus>
+							</div>
+							
+					    	<div class="form-group">
+					        	<label for="password" >Password</label>        
+					        	<input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+					        	<small id="passwordHelpBlock" class="form-text text-muted">
+				  				Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+								</small>
+							</div>
+					        <div class="form-group">
+					        	<button class="btn btn-lg btn-primary btn-block" type="submit" id="submitLogin">Log in</button>
+					        </div>
+						</form>
+
+					</div>
+				</div>
+
+
+
+			
+		</div>
+	</div>
+</div>
+

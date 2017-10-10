@@ -44,3 +44,16 @@ some apis
 
 products to sell 
   fantasy products (go from there) money ruppies 
+
+
+
+Presentation Stuff 
+
+-- user log in
+  talk about express-validator
+  wer saving paswords as a hash
+  bcrypt module and saltrounds (time it takes to hash in order to protect from multiple attemtpts)
+  passport module 
+  connect-session-sequelize - it creates a session database and adds sessiosn with data to the table
+  var LocalStrategy = require('passport-local').Strategy - its being called from passport.authenticate in order to 
+    check if an user exits 

@@ -18,13 +18,23 @@
   },
   "homepage": "https://github.com/hcardenas/Web-Store#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
+    "connect-session-sequelize": "^4.1.0",
+    "cookie-parse": "^0.4.0",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.1",
     "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.6",
     "express-validator": "^4.2.1",
     "method-override": "^2.3.10",
     "mysql": "^2.14.1",
     "mysql2": "^1.4.2",
+    "passport": "^0.4.0",
+    "randomstring": "^1.1.5",
     "sequelize": "^4.13.3"
+  },
+  "devDependencies": {
+    "nightmare": "^2.10.0"
   }
 }
