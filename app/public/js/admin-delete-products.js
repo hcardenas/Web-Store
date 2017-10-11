@@ -40,9 +40,9 @@ function getProductsByCategory (arr, element, length) {
 	if (element === length) return;
 
 
-	$.get(`/api/get-products-by-categories/${arr[element].categories}`, function(data) {
+	$.get(`/api/get-products-by-categories/${arr[element].id}`, function(data) {
 		console.log(`product ${JSON.stringify(data)}`);
-		makeTableForProduct(arr[element].categories, data);
+		makeTableForProduct(arr[element].name, data);
 
 		// recursive call
 		getProductsByCategory(arr, element + 1, length);
@@ -103,7 +103,7 @@ function makeTableForProduct (category, data) {
 	for(var i in data){
 		var tableBodyRow= $("<tr>");
 		var tableBodyId = $("<th>").html(data[i].id);
-		var tableBodyProduct = $("<th>").html(data[i].productName); 		
+		var tableBodyProduct = $("<th>").html(data[i].name); 		
 		
 		var btn = $("<button>", {
 			on : {

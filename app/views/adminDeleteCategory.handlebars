@@ -10,7 +10,7 @@
       <ul class="list-group">
         <li class="list-group-item active text-center">Existing Categories<p class="card-text"></p></li>
         {{#each categories}}
-        <li class="list-group-item"><p class="card-text">{{this.categories}}</p></li>
+        <li class="list-group-item"><p class="card-text">{{this.name}}</p></li>
         {{/each}}
       </ul>
       <br><br><br>
@@ -30,8 +30,8 @@
           <label for="dropDownSelect">Remove Category</label>
           <select class="form-control" id="dropDownSelect">
             {{#each categories}}
-            <option>
-              {{this.categories}}
+            <option value={{this.id}}>
+              {{this.name}}
             </option>
             {{/each}}
           </select>

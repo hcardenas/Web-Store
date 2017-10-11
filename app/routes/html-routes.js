@@ -67,10 +67,14 @@ module.exports = function(app) {
 
   app.get("/admin/add-product", function(req, res) {
     if (req.user.user === "admin") {
-      db.Product.findAll({}).then(function(allProducts) {
+      db.Product.findAll({
+        include: [{model: db.Categories}]
+      }).then(function(allProducts) {
         db.Categories.findAll({
-          order: [['categories', 'DESC']]
+          order: [['name', 'DESC']]
+          
         }).then(function(allCat) {
+          console.log(`********** ${JSON.stringify(allProducts)}`);
           res.render("adminAddProduct", {
             products: allProducts,
             categories: allCat
@@ -86,7 +90,7 @@ module.exports = function(app) {
     if (req.user.user === "admin") {
       db.Product.findAll({}).then(function(allProducts) {
         db.Categories.findAll({
-          order: [['categories', 'DESC']]
+          order: [['name', 'DESC']]
         }).then(function(allCat) {
           res.render("adminRemoveProduct");
         });
@@ -96,12 +100,12 @@ module.exports = function(app) {
     }
   });
 
-  app.delete("/admin/remove-category/:category", function(req, res) {
+  app.delete("/admin/remove-category/:id", function(req, res) {
 
     if (req.user.user === "admin") {
       db.Categories.destroy({
           where: {
-            categories: req.params.category
+            id: req.params.id
           }
         })
         .then(function(rowDeleted) {
@@ -140,11 +144,14 @@ module.exports = function(app) {
   app.post("/admin/add-product", function(req, res) {
 
     if (req.user.user === "admin") {
+      console.log(`*************** ${JSON.stringify(req.body)}`);
       db.Product.create(req.body)
         .then(function(newProduct) {
           db.Product.findAll({
-            order: [['categories', 'DESC']]
+            order: [['name', 'DESC']],
+            include: [{ model: db.Categories }]
           }).then(function(dbResults) {
+
             db.Categories.findAll({}).then(function(allCat) {
               res.render("adminAddProduct", {
                 products: dbResults,

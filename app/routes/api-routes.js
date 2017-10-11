@@ -30,8 +30,8 @@ module.exports = function(app) {
     });
   });
 
-  app.get("/api/get-products-by-categories/:category", function(req, res) {
-    db.Product.findAll({where : {categories : req.params.category}}).then(function(dbResults) {
+  app.get("/api/get-products-by-categories/:id", function(req, res) {
+    db.Product.findAll({where : {CategoryId : req.params.id}, include: [{model: db.Categories}]}).then(function(dbResults) {
       res.json(dbResults);
     });
   });
