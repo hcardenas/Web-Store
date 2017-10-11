@@ -18,9 +18,21 @@ var saltRounds = 10;
 module.exports = function(app) {
 
   // GET route for getting all 
-  app.get("/api/posts/", function(req, res) {
-    db.Users.create(req.body).then(function(dbAuthor) {
-      res.json(dbAuthor);
+  app.get("/api/get-all-products", function(req, res) {
+    db.Product.findAll({}).then(function(dbResults) {
+      res.json(dbResults);
+    });
+  });
+
+  app.get("/api/get-all-categories", function(req, res) {
+    db.Categories.findAll({}).then(function(dbResults) {
+      res.json(dbResults);
+    });
+  });
+
+  app.get("/api/get-products-by-categories/:id", function(req, res) {
+    db.Product.findAll({where : {CategoryId : req.params.id}, include: [{model: db.Categories}]}).then(function(dbResults) {
+      res.json(dbResults);
     });
   });
 
@@ -42,7 +54,10 @@ module.exports = function(app) {
 
   });
 
-  app.post("/log-in", passport.authenticate('local', {successRedirect : '/store', failureRedirect : '/' } ));
+  app.post("/log-in", passport.authenticate('local', {
+    successRedirect: '/store',
+    failureRedirect: '/'
+  }));
 
   app.get("/log-out", function(req, res) {
     req.logout();
@@ -88,10 +103,13 @@ module.exports = function(app) {
           console.log("here something" + JSON.stringify(dbResponse));
 
           const user_id = dbResponse.id;
-          console.log(user_id);
-          req.login(user_id, err => {
-            db.Categories.findAll({}).then(function (dbResults) {
-              res.render("store", {cat : dbResults});
+          req.login({
+            user_id: user_id
+          }, err => {
+            db.Categories.findAll({}).then(function(dbResults) {
+              res.render("store", {
+                cat: dbResults
+              });
             });
 
             //res.render("store");
