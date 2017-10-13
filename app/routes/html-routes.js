@@ -32,10 +32,25 @@ module.exports = function(app) {
   app.get("/store/:categoryName", authenticationMiddleware(), function(req, res) {
 
     db.Categories.findAll({}).then(function(dbResults) {
-      res.render("store", {
-        cat: dbResults,
-        title: req.param.categoryName
-      });
+        var cateId = "";
+        for (var i in dbResults) {
+            if (dbResults[i].name === req.params.categoryName) cateId = dbResults[i].id;
+        }
+        db.Product.findAll({
+            where: {
+                CategoryId: cateId
+            },
+            include: [{
+                model: db.Categories
+            }]
+        }).then(function(allProducts) {
+          console.log(`********** ${JSON.stringify(allProducts)}\n~~~~~~~~~~~~`);
+            res.render("store", {
+                cat: dbResults,
+                title: req.param.categoryName,
+                product: allProducts
+            });
+        });
     });
   });
 
@@ -100,6 +115,20 @@ module.exports = function(app) {
     }
   });
 
+  app.get("/admin/update-product", function(req, res) {
+    if (req.user.user === "admin") {
+      db.Product.findAll({}).then(function(allProducts) {
+        db.Categories.findAll({
+          order: [['name', 'DESC']]
+        }).then(function(allCat) {
+          res.render("adminUpdateProduct");
+        });
+      });
+    } else {
+      res.redirect("/")
+    }
+  });
+
   app.delete("/admin/remove-category/:id", function(req, res) {
 
     if (req.user.user === "admin") {
@@ -129,7 +158,7 @@ module.exports = function(app) {
           db.Categories.findAll({}).then(function(dbResults) {
             res.render("adminCreateCategory", {
               categories: dbResults,
-              success: ` ${newCat.categories} added to database`
+              success: ` ${newCat.name} added to database`
             });
           }).catch(function(err) {
             res.redirect("/");
@@ -156,7 +185,7 @@ module.exports = function(app) {
               res.render("adminAddProduct", {
                 products: dbResults,
                 categories : allCat,
-                success: ` ${newProduct.productName} added to database`
+                success: ` ${newProduct.name} added to database`
               });
             });
 
@@ -186,6 +215,24 @@ module.exports = function(app) {
     }
   });
 
+  app.put("/admin/update-product", function(req, res) {
+
+    if (req.user.user === "admin") {
+      console.log("~~~~~~~~~~~`");
+      console.log(JSON.stringify(req.body));
+      console.log("~~~~~~~~~~~`");
+      db.Product.update(req.body, {
+          where: {
+            id: req.body.id
+          }
+        })
+        .then(function(dbUpdate) { 
+            res.json(dbUpdate);         
+        });
+    } else {
+      res.redirect("/")
+    }
+  });
 
 
   function authenticationMiddleware() {
