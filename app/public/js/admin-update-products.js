@@ -1,11 +1,35 @@
 $(document).ready(function() {
-	console.log("im here");
+    console.log("im here");
 
-	$("#content").empty();
+    $("#content").empty();
+    $('#formId')[0].reset();
+    getAllProducts();
 
-	getAllProducts();
+    $("#submitBtn").on("click", function(event) {
+        event.preventDefault();
+        var data = {
+        	name: $("#productName").val().trim(),
+			price: $("#price").val().trim(),
+			imgSrc: $("#imgSrc").val().trim(),
+			description: $("#description").val().trim(),
+ 			CategoryId: $("#dropDownSelect").val(),
+ 			id : $("#submitBtn").attr("itemID")
+        };
+
+        $.ajax({
+            method: "PUT",
+            url: `/admin/update-product`,
+            data: data
+        }).done(function(data) {
+            $("#content").empty();
+            getAllProducts();
+            console.log("success");
+        });
+
+    });
 
 });
+
 
 
 function getAllProducts () {
@@ -37,16 +61,6 @@ function getProductsByCategory (arr, element, length) {
 	
 }
 
-// <thead>
-//     <tr>
-//       <th>#</th>
-//       <th>First Name</th>
-//       <th>Last Name</th>
-//       <th>Username</th>
-//     </tr>
-//   </thead>
-
-//   <button type="button" class="btn btn-danger">
 
 function makeTableForProduct (category, data) {
 	console.log ("making new table");
@@ -93,18 +107,19 @@ function makeTableForProduct (category, data) {
 		
 		var btn = $("<button>", {
 			on : {
-				click : function () {
-					$.ajax({
-      					method: "DELETE",
-				    	url: `/admin/remove-product/${data[i].id}`
-				    }).done(function (data) {
-				    	$("#content").empty();
-						getAllProducts();
-				    	console.log("success");
-				    });
+				click : function (event) {
+					event.preventDefault();
+					$('#formId')[0].reset();
+					$("#productName").val(data[i].name);
+					$("#price").val(data[i].price);
+					$("#imgSrc").val(data[i].imgSrc);
+					$("#description").val(data[i].description);
+					$("#submitBtn").attr("itemID", data[i].id);
+					getFromCategories();
+
 				}
 			}
-		}).addClass("btn btn-danger").html("DELETE");
+		}).addClass("btn btn-warning").html("Update");
 		var tableBodyAction = $("<th>").append(btn);
 		//append everything to te row then to the table body
 		tableBodyRow.append(tableBodyId).append(tableBodyProduct).append(tableBodyAction);
@@ -124,3 +139,26 @@ function makeTableForProduct (category, data) {
 	contentDiv.append(unOrderedList);
 
 }
+
+
+function getFromCategories() {
+
+	$.get(`/api/get-all-categories`, function(data) {
+		var mainDiv = $("#categoryDiv");
+		mainDiv.empty();
+		var lable = $("<label>").attr("for", "dropDownSelect").html("Update Category");
+		var select = $("<select>").addClass("form-control").attr("id", "dropDownSelect");
+
+		for (var i in data) {
+			select.append( $("<option>").attr("value", `${data[i].id}`).html(data[i].name));
+		}
+
+		mainDiv.append(select);
+		mainDiv.append(lable);
+	});
+}
+
+
+
+
+
