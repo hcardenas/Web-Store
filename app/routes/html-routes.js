@@ -21,7 +21,6 @@ module.exports = function(app) {
 
   app.get("/store", authenticationMiddleware(), function(req, res) {
     db.Categories.findAll({}).then(function(dbResults) {
-      console.log("********\n" + dbResults + "~~~~~~~")
       res.render("store", {
         cat: dbResults
       });
@@ -32,25 +31,46 @@ module.exports = function(app) {
   app.get("/store/:categoryName", authenticationMiddleware(), function(req, res) {
 
     db.Categories.findAll({}).then(function(dbResults) {
-        var cateId = "";
-        for (var i in dbResults) {
-            if (dbResults[i].name === req.params.categoryName) cateId = dbResults[i].id;
-        }
-        db.Product.findAll({
-            where: {
-                CategoryId: cateId
-            },
-            include: [{
-                model: db.Categories
-            }]
-        }).then(function(allProducts) {
-          console.log(`********** ${JSON.stringify(allProducts)}\n~~~~~~~~~~~~`);
-            res.render("store", {
-                cat: dbResults,
-                title: req.param.categoryName,
-                product: allProducts
-            });
+      var cateId = "";
+      for (var i in dbResults) {
+        if (dbResults[i].name === req.params.categoryName) cateId = dbResults[i].id;
+      }
+      db.Product.findAll({
+        where: {
+          CategoryId: cateId
+        },
+        include: [{
+          model: db.Categories
+        }]
+      }).then(function(allProducts) {
+        res.render("store", {
+          cat: dbResults,
+          title: req.params.categoryName,
+          product: allProducts
         });
+      });
+    });
+  });
+
+  app.get("/product/:id", authenticationMiddleware(), function(req, res) {
+    // console.log("outside of db req********\n" + JSON.stringify(req.params.name) + "\n~~~~~~~")
+    db.Categories.findAll({}).then(function(dbResults) {
+      db.Product.findAll({
+        where: {
+          name: req.params.id
+        }
+      }).then(function(products) {
+        console.log("inside products ********\n" + JSON.stringify(products) + "\n" + req.params.id == products.name + "\n~~~~~~~");
+        console.log(`******* param: ${req.params.id} \n ******** productts: ${products.name} \n~~~~~~~~ ${req.params.id == products[0].name}`);
+
+        if (req.params.id == products[0].name) {
+           //console.log("inside products ********\n" + JSON.stringify(products) + "\n~~~~~~~");
+          res.render("storeProduct", {
+            cat : dbResults,
+            product: products
+          });
+        }
+      });
     });
   });
 
@@ -83,13 +103,17 @@ module.exports = function(app) {
   app.get("/admin/add-product", function(req, res) {
     if (req.user.user === "admin") {
       db.Product.findAll({
-        include: [{model: db.Categories}]
+        include: [{
+          model: db.Categories
+        }]
       }).then(function(allProducts) {
         db.Categories.findAll({
-          order: [['name', 'DESC']]
-          
+          order: [
+            ['name', 'DESC']
+          ]
+
         }).then(function(allCat) {
-          console.log(`********** ${JSON.stringify(allProducts)}`);
+          //console.log(`********** ${JSON.stringify(allProducts)}`);
           res.render("adminAddProduct", {
             products: allProducts,
             categories: allCat
@@ -105,7 +129,9 @@ module.exports = function(app) {
     if (req.user.user === "admin") {
       db.Product.findAll({}).then(function(allProducts) {
         db.Categories.findAll({
-          order: [['name', 'DESC']]
+          order: [
+            ['name', 'DESC']
+          ]
         }).then(function(allCat) {
           res.render("adminRemoveProduct");
         });
@@ -119,7 +145,9 @@ module.exports = function(app) {
     if (req.user.user === "admin") {
       db.Product.findAll({}).then(function(allProducts) {
         db.Categories.findAll({
-          order: [['name', 'DESC']]
+          order: [
+            ['name', 'DESC']
+          ]
         }).then(function(allCat) {
           res.render("adminUpdateProduct");
         });
@@ -173,18 +201,22 @@ module.exports = function(app) {
   app.post("/admin/add-product", function(req, res) {
 
     if (req.user.user === "admin") {
-      console.log(`*************** ${JSON.stringify(req.body)}`);
+      //console.log(`*************** ${JSON.stringify(req.body)}`);
       db.Product.create(req.body)
         .then(function(newProduct) {
           db.Product.findAll({
-            order: [['name', 'DESC']],
-            include: [{ model: db.Categories }]
+            order: [
+              ['name', 'DESC']
+            ],
+            include: [{
+              model: db.Categories
+            }]
           }).then(function(dbResults) {
 
             db.Categories.findAll({}).then(function(allCat) {
               res.render("adminAddProduct", {
                 products: dbResults,
-                categories : allCat,
+                categories: allCat,
                 success: ` ${newProduct.name} added to database`
               });
             });
@@ -207,8 +239,8 @@ module.exports = function(app) {
             id: req.params.id
           }
         })
-        .then(function(rowDeleted) { 
-            res.json(rowDeleted);         
+        .then(function(rowDeleted) {
+          res.json(rowDeleted);
         });
     } else {
       res.redirect("/")
@@ -226,8 +258,8 @@ module.exports = function(app) {
             id: req.body.id
           }
         })
-        .then(function(dbUpdate) { 
-            res.json(dbUpdate);         
+        .then(function(dbUpdate) {
+          res.json(dbUpdate);
         });
     } else {
       res.redirect("/")
@@ -237,7 +269,7 @@ module.exports = function(app) {
 
   function authenticationMiddleware() {
     return (req, res, next) => {
-      console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
+     // console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
 
       if (req.isAuthenticated()) return next();
       res.render('login', {
